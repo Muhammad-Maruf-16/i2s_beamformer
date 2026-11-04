@@ -2,6 +2,9 @@
 #define MIC_UDP_H
 #include "lwip/udp.h"
 #include "xil_types.h"
+/* Satu frame di protokol ini = satu pasangan Mic1+Mic2, bukan satu word.
+ * MIC_FRAMES harus sama dengan FRAMES_PER_PACKET pada modul Verilog.
+ * Ukuran DMA MIC_BYTES harus sesuai TLAST; ubah semua sisi secara bersamaan. */
 #define MIC_FRAMES 128U
 #define MIC_BYTES (MIC_FRAMES * 8U)
 /* Call after lwIP/netif init. destination is the laptop's IPv4 address. */
