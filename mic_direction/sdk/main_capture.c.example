@@ -1,0 +1,38 @@
+/* Replace main.c in a NEW SDK "lwIP UDP Perf Server" application.
+ * Keep its platform*.c/.h, platform_config.h and BSP lwIP library.
+ * Remove udp_perf_server.c/.h; add mic_udp.c/.h and capture_loop.c.
+ * Require standalone + lwip202 v1.2, IPv4, DHCP off, NO_SYS=1.
+ */
+#include "lwip/init.h"
+#include "platform.h"
+#include "platform_config.h"
+#include "netif/xadapter.h"
+#include "lwip/ip_addr.h"
+#include "xil_printf.h"
+
+/* Used by the template's Zynq timer callback. */
+struct netif server_netif;
+extern void platform_enable_interrupts(void);
+extern int capture_loop(struct netif *netif);
+int main(void) {
+    ip_addr_t ip,mask,gw;
+    unsigned char mac[6]={0x02,0x53,0x39,0x00,0x00,0x01};
+    int result;
+    init_platform();
+    lwip_init();
+    ipaddr_aton("192.168.10.2",&ip);
+    ipaddr_aton("255.255.255.0",&mask);
+    ipaddr_aton("192.168.10.1",&gw);
+    if(!xemac_add(&server_netif,&ip,&mask,&gw,mac,PLATFORM_EMAC_BASEADDR)) {
+        xil_printf("Ethernet init failed; check PHY/MDIO configuration\r\n");
+        return -1;
+    }
+    netif_set_default(&server_netif);
+    platform_enable_interrupts();
+    netif_set_up(&server_netif);
+    xil_printf("Raw mic capture: 192.168.10.2 -> 192.168.10.1:5005\r\n");
+    result=capture_loop(&server_netif);
+    xil_printf("Capture stopped, error %d\r\n",result);
+    cleanup_platform();
+    return result;
+}

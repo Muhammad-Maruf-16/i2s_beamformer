@@ -1,0 +1,67 @@
+{
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0.19  2019-03-26 bk=1.5019 VDI=41 GEI=35 GUI=JA:9.0 TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 12 -x 3580 -y 720 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 12 -x 3580 -y 750 -defaultsOSRD
+preplace port lrclk_out_0 -pg 1 -lvl 12 -x 3580 -y 370 -defaultsOSRD
+preplace port sclk_out_0 -pg 1 -lvl 12 -x 3580 -y 400 -defaultsOSRD
+preplace port sdata_0_in_0 -pg 1 -lvl 0 -x 0 -y 890 -defaultsOSRD
+preplace port sdata_0_out_0 -pg 1 -lvl 12 -x 3580 -y 230 -defaultsOSRD
+preplace port sdata_1_in_0 -pg 1 -lvl 0 -x 0 -y 920 -defaultsOSRD
+preplace portBus led_clock -pg 1 -lvl 12 -x 3580 -y 800 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 5 -x 1630 -y 770 -defaultsOSRD
+preplace inst i2s_receiver_0 -pg 1 -lvl 11 -x 3390 -y 590 -defaultsOSRD
+preplace inst ps7_0_axi_periph -pg 1 -lvl 6 -x 2030 -y 230 -defaultsOSRD
+preplace inst rst_ps7_0_50M -pg 1 -lvl 1 -x 310 -y 670 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 10 -x 3050 -y 370 -defaultsOSRD
+preplace inst xlconstant_0 -pg 1 -lvl 10 -x 3050 -y 510 -defaultsOSRD
+preplace inst axi_dma_0 -pg 1 -lvl 3 -x 930 -y 590 -defaultsOSRD
+preplace inst axi_smc -pg 1 -lvl 4 -x 1250 -y 590 -defaultsOSRD
+preplace inst axis_tlast_gen_0 -pg 1 -lvl 2 -x 620 -y 570 -defaultsOSRD
+preplace inst i2s_transmitter_0 -pg 1 -lvl 11 -x 3390 -y 220 -defaultsOSRD
+preplace inst axis_dynamic_notch_0 -pg 1 -lvl 9 -x 2780 -y 550 -defaultsOSRD
+preplace inst c_counter_binary_0 -pg 1 -lvl 6 -x 2030 -y 800 -defaultsOSRD
+preplace inst xlslice_0 -pg 1 -lvl 7 -x 2290 -y 800 -defaultsOSRD
+preplace inst axis_noise_gate_0 -pg 1 -lvl 8 -x 2520 -y 540 -defaultsOSRD
+preplace inst axis_peq_7band_0 -pg 1 -lvl 10 -x 3050 -y 220 -defaultsOSRD
+preplace inst axis_dlms_beamformer_0 -pg 1 -lvl 6 -x 2030 -y 530 -defaultsOSRD
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 6 20 770 NJ 770 NJ 770 NJ 770 1420J 670 1840
+preplace netloc rst_ps7_0_50M_peripheral_aresetn 1 1 10 500 490 740 490 1100 500 NJ 500 1870 620 N 620 2400 640 2650 300 2900 130 3170
+preplace netloc xlconstant_0_dout 1 10 1 3200 230n
+preplace netloc clk_wiz_0_clk_out1 1 10 1 3220 210n
+preplace netloc i2s_receiver_0_lrclk_out 1 10 2 3230 370 3560
+preplace netloc i2s_receiver_0_sclk_out 1 10 2 3240 400 3550
+preplace netloc sdata_0_in_0_1 1 0 11 NJ 890 NJ 890 NJ 890 NJ 890 1410J 660 NJ 660 NJ 660 2390 650 NJ 650 NJ 650 NJ
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 11 20 570 490 480 750 480 1110 510 1400 510 1860 630 N 630 2390 630 2660 370 2930 310 3190
+preplace netloc i2s_transmitter_0_sdata_0_out 1 11 1 NJ 230
+preplace netloc sdata_1_in_0_1 1 0 11 NJ 920 NJ 920 NJ 920 NJ 920 NJ 920 NJ 920 NJ 920 2390 810 NJ 810 NJ 810 3210J
+preplace netloc c_counter_binary_0_Q 1 6 1 N 800
+preplace netloc xlslice_0_Dout 1 7 5 NJ 800 NJ 800 NJ 800 NJ 800 NJ
+preplace netloc processing_system7_0_M_AXI_GP0 1 5 1 1850 70n
+preplace netloc axi_smc_M00_AXI 1 4 1 1390 590n
+preplace netloc ps7_0_axi_periph_M02_AXI 1 6 5 NJ 220 2400 120 NJ 120 NJ 120 3180
+preplace netloc axi_dma_0_M_AXI_S2MM 1 3 1 N 570
+preplace netloc processing_system7_0_FIXED_IO 1 5 7 1880J 740 NJ 740 2400 750 NJ 750 NJ 750 NJ 750 NJ
+preplace netloc ps7_0_axi_periph_M01_AXI 1 2 5 760 450 NJ 450 NJ 450 NJ 450 2180
+preplace netloc ps7_0_axi_periph_M00_AXI 1 6 5 NJ 180 2390 110 NJ 110 NJ 110 3210
+preplace netloc processing_system7_0_DDR 1 5 7 NJ 730 NJ 730 N 730 NJ 730 NJ 730 NJ 730 3550J
+preplace netloc axis_tlast_gen_0_m_axis 1 2 1 N 570
+preplace netloc i2s_receiver_0_m_axis_aud 1 5 7 1880 610 2190J 520 2390 450 NJ 450 NJ 450 NJ 450 3540
+preplace netloc axis_noise_gate_0_m_axis 1 8 1 N 540
+preplace netloc ps7_0_axi_periph_M04_AXI 1 6 4 NJ 260 N 260 NJ 260 2910
+preplace netloc ps7_0_axi_periph_M05_AXI 1 6 3 NJ 280 N 280 2640
+preplace netloc axis_dynamic_notch_0_m_axis 1 9 1 2920 190n
+preplace netloc ps7_0_axi_periph_M03_AXI 1 6 2 2190 270 2400
+preplace netloc axis_dlms_beamformer_0_m_axis 1 6 2 N 530 N
+preplace netloc axis_peq_7band_0_m_axis 1 10 1 3180 150n
+levelinfo -pg 1 0 310 620 930 1250 1630 2030 2290 2520 2780 3050 3390 3580
+pagesize -pg 1 -db -bbox -sgen -140 -220 3730 940
+"
+}
+{
+   "da_axi4_cnt":"6",
+   "da_board_cnt":"4",
+   "da_clkrst_cnt":"19",
+   "da_ps7_cnt":"1"
+}

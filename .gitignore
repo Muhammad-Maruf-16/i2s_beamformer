@@ -1,0 +1,57 @@
+# Vivado generated build products and caches
+.Xil/
+*.cache/
+*.runs/
+*.sim/
+*.hw/
+*.ip_user_files/
+*.jou
+*.log
+*.str
+*.pb
+*.dcp
+*.bit
+*.bin
+*.hdf
+*.xsa
+*.wdb
+*.wcfg
+*.backup.*
+
+# SDK workspace state and compiled outputs; keep source/project metadata
+**/.metadata/
+**/.sdk/
+**/RemoteSystemsTempFiles/
+**/webtalk/
+**/Debug/
+**/Release/
+*.o
+*.a
+*.elf
+*.elf.size
+*.map
+*.zip
+
+# Python environments and recordings
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.npyseq
+
+# Local AI agent caches, sessions, history and generated status/memory
+.claude/
+.codex/
+.agent/
+.agents/
+.gemini/
+.cursor/
+.aider*
+.continue/
+.roo/
+.cline/
+PROJECT_MEMORY.md
+PROJECT_MEMORY.original.md
+CLAUDE.local.md
+AGENTS.local.md
+*.code-workspace
