@@ -9,6 +9,13 @@
 //              - [31]    : Even Parity bit over [30:4]
 //////////////////////////////////////////////////////////////////////////////////
 
+// DSP48E1 - hasil OOC synthesis yang diperiksa: 0 instance.
+// Walau source berisi perkalian filter/adaptasi, hasil filter tidak dipakai
+// oleh clean_val pada versi ini. Vivado menghapus logika yang tidak memiliki
+// pengaruh ke output (dead logic). Ini bukan bukti filter adaptif memakai LUT.
+// Bukti: i2s_beamformer.runs/design_1_axis_dlms_beamformer_0_0_synth_1/
+// design_1_axis_dlms_beamformer_0_0_utilization_synth.rpt dan sim_netlist.v.
+// Bila jalur cancellation diaktifkan, lakukan synthesis ulang untuk jumlah DSP.
 module axis_dlms_beamformer #(
     parameter GAIN_SHIFT = 0,       // Boost 4x (+12 dB)
     parameter MU_SHIFT   = 25       // Step-size mu = 2^(-25) untuk kestabilan adaptif
@@ -153,6 +160,9 @@ module axis_dlms_beamformer #(
                     end
 
                     // Estimasi bising adaptif DLMS
+                    // Kandidat perkalian DSP jika hasilnya dipakai output.
+                    // Saat ini y_val hasil filter di bawah tidak digunakan
+                    // dalam clean_val, sehingga operasi ini dapat terhapus.
                     filter_acc = (w[0] * x_val) +
                                  (w[1] * x_pipe[0]) +
                                  (w[2] * x_pipe[1]) +
@@ -164,6 +174,10 @@ module axis_dlms_beamformer #(
                     y_val = filter_acc[46:23];
 
                     // Output bersih
+                    // TITIK BYPASS ADAPTIVE CANCELLATION: output hanya d_val,
+                    // yaitu rata-rata dua mic. Tidak ada pengurangan y_val.
+                    // Karena itu update bobot/estimasi noise tidak mengubah
+                    // audio keluaran dan tidak mempertahankan DSP48 di netlist.
                     clean_val = d_val;
 
                     // Update Bobot DLMS (Delay D = 1)
@@ -174,6 +188,9 @@ module axis_dlms_beamformer #(
                     e_d1 <= clean_val;
 
                     // Digital Volume Boost (wadah 40-bit aman) dengan Anti-Clipping Limiter
+                    // Shift konstanta + clamp bukan pengali DSP48 tersendiri.
+                    // Pada hasil yang diperiksa, jalur rata-rata/gain/clamp
+                    // yang tersisa tidak memakai instance DSP48E1.
                     boosted_val = {{16{clean_val[23]}}, clean_val} <<< GAIN_SHIFT;
                     if (boosted_val > 40'sd8388607)
                         clamped_val = 24'sd8388607;

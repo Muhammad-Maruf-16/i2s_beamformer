@@ -20,13 +20,13 @@ preplace inst axi_dma_0 -pg 1 -lvl 3 -x 820 -y 800 -defaultsOSRD
 preplace inst axi_smc -pg 1 -lvl 4 -x 1140 -y 800 -defaultsOSRD
 preplace inst axis_tlast_gen_0 -pg 1 -lvl 2 -x 520 -y 1000 -defaultsOSRD
 preplace inst i2s_transmitter_0 -pg 1 -lvl 10 -x 3070 -y 330 -defaultsOSRD
-preplace inst axis_dynamic_notch_0 -pg 1 -lvl 8 -x 2460 -y 370 -defaultsOSRD
 preplace inst c_counter_binary_0 -pg 1 -lvl 9 -x 2730 -y 60 -defaultsOSRD
 preplace inst xlslice_0 -pg 1 -lvl 10 -x 3070 -y 60 -defaultsOSRD
+preplace inst axis_mic_pair_capture_0 -pg 1 -lvl 2 -x 520 -y 780 -defaultsOSRD
+preplace inst axis_dlms_beamformer_0 -pg 1 -lvl 6 -x 1890 -y 600 -defaultsOSRD
 preplace inst axis_noise_gate_0 -pg 1 -lvl 7 -x 2210 -y 430 -defaultsOSRD
 preplace inst axis_peq_7band_0 -pg 1 -lvl 9 -x 2730 -y 190 -defaultsOSRD
-preplace inst axis_dlms_beamformer_0 -pg 1 -lvl 6 -x 1890 -y 600 -defaultsOSRD
-preplace inst axis_mic_pair_capture_0 -pg 1 -lvl 2 -x 520 -y 780 -defaultsOSRD
+preplace inst axis_dynamic_notch_0 -pg 1 -lvl 8 -x 2460 -y 370 -defaultsOSRD
 preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 6 20 660 NJ 660 NJ 660 NJ 660 NJ 660 1700
 preplace netloc rst_ps7_0_50M_peripheral_aresetn 1 1 9 400 860 650 900 1000 620 NJ 620 1730 70 2070 530 2340 460 2610 300 2850
 preplace netloc xlconstant_0_dout 1 9 1 2900 340n

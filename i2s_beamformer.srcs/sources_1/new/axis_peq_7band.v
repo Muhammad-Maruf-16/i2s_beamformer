@@ -17,6 +17,15 @@
 //              - Power-on Default: 100% Flat / Bypass (transparent audio).
 //////////////////////////////////////////////////////////////////////////////////
 
+// DSP48E1 - BUKTI DARI HASIL SYNTHESIS, bukan primitive dipanggil di RTL.
+// Vivado 2019.1 menginferensikan operator aritmetika menjadi DSP48E1.
+// Snapshot OOC 3 Nov 2026: 11 instance pada netlist
+// i2s_beamformer.runs/design_1_axis_peq_7band_0_0_synth_1/
+// design_1_axis_peq_7band_0_0_sim_netlist.v dan utilization_synth.rpt.
+// Nama instance: master_mult (1), stage_x1/stage_x1__0 (2),
+// p_0_out dan p_0_out__0..__6 (8). Jumlah dapat berubah saat RTL/opsi berubah.
+// Satu '*' tidak selalu = satu DSP; operasi lebar bisa memakai beberapa DSP.
+// Ini snapshot build yang diperiksa, bukan janji alokasi untuk semua build.
 module axis_peq_7band #(
     parameter C_S_AXI_DATA_WIDTH = 32,
     parameter C_S_AXI_ADDR_WIDTH = 8
@@ -114,6 +123,9 @@ module axis_peq_7band #(
     reg signed [23:0] audio_final;
 
     // Master Volume Multiplier & Saturation Limiter
+    // DSP48 TERLACAK: instance netlist bernama master_mult (1 DSP48E1).
+    // Mengalikan audio signed dengan gain Q8. Shift sesudahnya mengembalikan
+    // skala gain; pembatasan amplitudo dilakukan terpisah di state S_VOL.
     wire signed [39:0] master_mult   = audio_peq * $signed({1'b0, reg_master_vol});
     wire signed [31:0] master_scaled = master_mult >>> 8; //master_mult[31:8];
 
@@ -288,10 +300,22 @@ module axis_peq_7band #(
                 S_CALC: begin
                     if (stage_enable[calc_stage]) begin
                         // y(n) = b0 * x(n) + d1(n-1)
+                        // DSP48 TERLACAK: kelompok stage_x1/stage_x1__0
+                        // berada pada perkalian stage_x dengan koefisien b0.
+                        // Kelompok p_0_out* terkait aritmetika pembaruan d1/d2
+                        // di bawah; optimizer mengganti nama sinyal sementara.
+                        // Batas persis DSP versus adder LUT harus dilihat dari
+                        // koneksi netlist, bukan menganggap seluruh '+' pakai DSP.
+                        // calc_stage memilih koefisien/delay 7 band secara serial;
+                        // hardware operator digunakan ulang, bukan 11 DSP per band.
                         y_acc   = (stage_x * coeff_b0[calc_stage]) + d1[calc_stage];
                         stage_y = y_acc[49:26]; // Dibagi 2^26
 
                         // d1(n) = b1 * x(n) - a1 * y(n) + d2(n-1)
+                        // Perkalian feed-forward b1 dan feedback a1 beserta
+                        // aritmetika d2 juga dipetakan oleh synthesis. Netlist
+                        // mencatat 8 DSP dalam kelompok p_0_out*, secara gabungan
+                        // untuk update d1/d2; tidak dibagi per baris di komentar ini.
                         d1[calc_stage] <= (stage_x * coeff_b1[calc_stage]) -
                                           (stage_y * coeff_a1[calc_stage]) + d2[calc_stage];
 
@@ -313,6 +337,10 @@ module axis_peq_7band #(
                 end
 
                 // Step Pengaturan Master Volume & Saturation Limiter
+                // CLAMP / HARD CLIPPING, bukan limiter dengan envelope gain.
+                // Membandingkan nilai hasil gain lalu memilih batas/sampel.
+                // Tidak ada DSP48 tambahan bernama limiter dalam netlist yang
+                // ditelusuri; DSP master_mult dipakai untuk gain sebelum clamp.
                 S_VOL: begin
                     if (master_scaled > 32'sd8388607)
                         audio_final <= 24'sd8388607;

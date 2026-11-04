@@ -1,0 +1,24 @@
+#include "steer_beamformer.h"
+#include "xparameters.h"
+#include "xil_printf.h"
+
+/* Ganti macro dengan nama aktual di xparameters.h setelah routing + export.
+ * Jangan memakai alamat contoh acak: cocokkan Address Editor. */
+int setup_beamformer(UINTPTR base)
+{
+    if (Beamformer_Init(base)!=0) {
+        xil_printf("Beamformer ID/base address tidak cocok\r\n");
+        return -1;
+    }
+    /* +90: sisi Mic1; -90: sisi Mic2; 0: tegak lurus garis antarmic.
+     * Pastikan jarak pusat kapsul memang 0.05 meter dan Fs=48000. */
+    if (Beamformer_SetAngle(base,+90.0f,0.05f,48000.0f)!=0) return -1;
+    xil_printf("Beamformer active, delay Q8=%d\r\n",Beamformer_GetDelayQ8(base));
+    return 0;
+}
+/* Dapat dipanggil saat aplikasi berjalan, tidak perlu rebuild bitstream:
+ * Beamformer_SetAngle(base,+30.0f,0.05f,48000.0f);
+ * Beamformer_SetAngle(base,-30.0f,0.05f,48000.0f);
+ * Beamformer_Enable(base,0); // average tanpa delay, bukan mute
+ * Perubahan mendadak bisa klik. Hindari steering cepat pada versi awal ini.
+ */

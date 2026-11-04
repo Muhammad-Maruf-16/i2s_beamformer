@@ -15,6 +15,13 @@
 //              - Audio Interface: AXI4-Stream (Xilinx AES3 audio format compliant).
 //////////////////////////////////////////////////////////////////////////////////
 
+// DSP48E1 - hasil OOC synthesis Vivado 2019.1 (snapshot 3 Nov 2026):
+// total 12 DSP48E1. Bukti netlist dan report pada
+// i2s_beamformer.runs/design_1_axis_dynamic_notch_0_0_synth_1/.
+// Pemetaan instance: bp_acc_wire0* 2, bp_d12* 4, bp_d21* 4,
+// depth_calc 1, sub_mult0 1. '*' di sini berarti kelompok nama instance,
+// bukan jumlah perkalian RTL. Operasi lebar dapat dipecah ke beberapa DSP.
+// Synthesis menginferensikan operator RTL; tidak ada pemanggilan DSP48 manual.
 module axis_dynamic_notch #(
     parameter C_S_AXI_DATA_WIDTH = 32,
     parameter C_S_AXI_ADDR_WIDTH = 6
@@ -141,9 +148,15 @@ module axis_dynamic_notch #(
     reg signed [23:0] audio_final;
 
     // Arithmetic Wires murni kombinatorik (mencegah desynchronization register)
+    // DSP48 TERLACAK: bp_acc_wire0 dan bp_acc_wire0__0 (2 instance).
+    // Perkalian audio_in * coeff_bp_b0 untuk output biquad, ditambah state d1.
+    // Koefisien Q26: pengambilan bit setelahnya mengembalikan skala sampel.
     wire signed [57:0] bp_acc_wire   = (audio_in * coeff_bp_b0) + bp_d1;
     wire signed [31:0] bp_scaled     = bp_acc_wire[57:26];
     wire [23:0]        env_excess    = (env_bp > reg_thresh) ? (env_bp - reg_thresh) : 24'd0;
+    // DSP48 TERLACAK: depth_calc (1 instance).
+    // Mengalikan excess envelope dengan sensitivitas untuk target kedalaman
+    // notch; gain pengurangan ini hanya jalur bandpass, bukan limiter global.
     wire [15:0]        depth_calc    = (env_excess >> 7) * reg_sens;
     wire [8:0]         depth_target  = (depth_calc > reg_max_depth) ? reg_max_depth : depth_calc[8:0];
     wire signed [24:0] audio_diff    = audio_in - sub_val;
@@ -287,6 +300,8 @@ module axis_dynamic_notch #(
                 end
 
                 // Step 0: Hitung output Bandpass y_bp dengan Anti-Overflow Saturation Limiter
+                // Clamp output bandpass ke PCM24: pembanding dan pemilih.
+                // Total DSP di atas bukan berarti clamp ini memakai DSP khusus.
                 S_BP0: begin
                     if (bp_scaled > 32'sd8388607)
                         y_bp <= 24'sd8388607;
@@ -299,6 +314,10 @@ module axis_dynamic_notch #(
 
                 // Step 1: Update delay line IIR d1 & d2 + Detektor Envelope + Hitung Depth
                 S_BP1: begin
+                    // DSP48 TERLACAK: bp_d12, bp_d12__0..__2 = 4 instance
+                    // pada kelompok pembaruan bp_d1; bp_d21, bp_d21__0..__2
+                    // = 4 instance pada kelompok pembaruan bp_d2 di bawah.
+                    // Kedua operasi memuat feed-forward dan feedback biquad.
                     bp_d1 <= (audio_in * coeff_bp_b1) - (y_bp * coeff_bp_a1) + bp_d2;
                     bp_d2 <= (audio_in * coeff_bp_b2) - (y_bp * coeff_bp_a2);
 
@@ -320,11 +339,17 @@ module axis_dynamic_notch #(
                     end
 
                     // Hitung nilai pengurangan
+                    // DSP48 TERLACAK: sub_mult0 (1 instance).
+                    // Skalakan bandpass y_bp dengan current_depth untuk
+                    // menentukan komponen yang akan dikurangi dari audio asli.
                     sub_mult  <= y_bp * $signed({1'b0, current_depth});
                     fsm_state <= S_DIFF;
                 end
 
                 // Step 2: Kurangkan sinyal dengung dari audio asli (100% Signed Safe)
+                // Pengurangan dan clamp akhir bukan limiter broadband:
+                // jalur ini mengurangi komponen bandpass/notch tertentu.
+                // Tidak ada instance DSP limiter terpisah pada snapshot ini.
                 S_DIFF: begin
                     if (audio_diff > 25'sd8388607)
                         audio_final <= 24'sd8388607;

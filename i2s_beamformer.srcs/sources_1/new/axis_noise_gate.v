@@ -9,6 +9,12 @@
 //              - Audio Interface: AXI4-Stream (Xilinx AES3 audio format compliant).
 //////////////////////////////////////////////////////////////////////////////////
 
+// DSP48E1 - hasil OOC synthesis Vivado 2019.1 (snapshot 3 Nov 2026):
+// 2 DSP48E1, instance mic_boost_mult dan audio_gated0, diverifikasi pada
+// i2s_beamformer.runs/design_1_axis_noise_gate_0_1_synth_1/
+// design_1_axis_noise_gate_0_1_sim_netlist.v dan utilization_synth.rpt.
+// Diturunkan otomatis dari operasi '*', bukan instansiasi primitive di source.
+// Envelope, threshold, hold, dan clamp bukan masing-masing blok DSP48.
 module axis_noise_gate #(
     parameter C_S_AXI_DATA_WIDTH = 32,
     parameter C_S_AXI_ADDR_WIDTH = 6
@@ -112,6 +118,8 @@ module axis_noise_gate #(
 
     // Mic Gain Scaler & Limiter
     wire signed [23:0] raw_sample        = s_axis_tdata[27:4];
+    // DSP48 TERLACAK: mic_boost_mult, 1 DSP48E1 untuk preamp/gain Q8.
+    // Perubahan reg_mic_gain melalui SDK mengubah operand, bukan menambah DSP.
     wire signed [39:0] mic_boost_mult    = raw_sample * $signed({1'b0, reg_mic_gain});
     wire signed [31:0] mic_boost_scaled  = mic_boost_mult >>> 8; //mic_boost_mult[31:8];
 
@@ -243,6 +251,9 @@ module axis_noise_gate #(
         end else begin
             // 1. Tangkap sampel Channel 0 (Left) dari Beamformer dengan Mic Gain Scaler & Anti-Overflow Clamping
             if (s_axis_tvalid && s_axis_tready && (s_axis_tid == 3'd0)) begin
+                // Clamp preamp: pembanding + pemilih batas PCM24.
+                // Ini hard clipping; tidak otomatis menurunkan gain semua
+                // sampel seperti compressor/limiter broadband dengan release.
                 if (mic_boost_scaled > 32'sd8388607)
                     audio_in <= 24'sd8388607;
                 else if (mic_boost_scaled < -32'sd8388608)
@@ -297,6 +308,10 @@ module axis_noise_gate #(
                             end
 
                             // Terapkan Gain VCA
+                            // DSP48 TERLACAK: audio_gated0, 1 DSP48E1.
+                            // Gain gate Q8 0..256 mengatur mute/ramp sinyal.
+                            // Nama netlist mengikuti hasil audio_gated, bukan
+                            // selalu identik dengan nama gated_mult di source.
                             gated_mult  = audio_in * $signed({1'b0, gain_q8});
                             audio_gated <= gated_mult[31:8];
                         end else begin
