@@ -10,7 +10,6 @@
 *.str
 *.pb
 *.dcp
-*.bit
 *.bin
 *.hdf
 *.xsa
@@ -23,11 +22,13 @@
 **/.sdk/
 **/RemoteSystemsTempFiles/
 **/webtalk/
-**/Debug/
-**/Release/
+# Keep ELF in build roots while ignoring other compiler products.
+**/Debug/*
+!**/Debug/*.elf
+**/Release/*
+!**/Release/*.elf
 *.o
 *.a
-*.elf
 *.elf.size
 *.map
 *.zip
@@ -55,3 +56,14 @@ PROJECT_MEMORY.original.md
 CLAUDE.local.md
 AGENTS.local.md
 *.code-workspace
+
+# Reusable FPGA programming artifacts from the active Vivado implementation.
+# Reopen ignored parent directories explicitly; keep other run products ignored.
+!i2s_beamformer.runs/
+i2s_beamformer.runs/*
+!i2s_beamformer.runs/impl_1/
+i2s_beamformer.runs/impl_1/*
+!i2s_beamformer.runs/impl_1/*.bit
+
+# SDK hardware description accompanies the active BIT/ELF for SDK/JTAG restore.
+!i2s_beamformer.sdk/design_1_wrapper_hw_platform_3/system.hdf
