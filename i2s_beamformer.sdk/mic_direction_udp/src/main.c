@@ -38,6 +38,7 @@
 #include "lwip/init.h"
 #include "lwip/inet.h"
 #include "xil_cache.h"
+#include "audio_config.h"
 
 #if LWIP_DHCP==1
 #include "lwip/dhcp.h"
@@ -55,8 +56,6 @@ extern volatile int TcpSlowTmrFlag;
 #define DEFAULT_GW_ADDRESS	"192.168.1.1"
 
 void platform_enable_interrupts(void);
-void start_application(void);
-void print_app_header(void);
 
 #if defined (__arm__) && !defined (ARMR5)
 #if XPAR_GIGE_PCS_PMA_SGMII_CORE_PRESENT == 1 || \
@@ -143,7 +142,7 @@ int main(void)
 	init_platform();
 
 	xil_printf("\r\n\r\n");
-	xil_printf("-----lwIP RAW Mode UDP Server Application-----\r\n");
+	xil_printf("-----S9 Beamforming Speaker + Raw Mic UDP-----\r\n");
 
 	/* initialize lwIP */
 	lwip_init();
@@ -193,38 +192,12 @@ int main(void)
 
 	xil_printf("\r\n");
 
-//	/* print app header */
-//	print_app_header();
-//
-//	/* start the application*/
-//	start_application();
-//	xil_printf("\r\n");
-//
-//	while (1) {
-//		if (TcpFastTmrFlag) {
-//			tcp_fasttmr();
-//			TcpFastTmrFlag = 0;
-//		}
-//		if (TcpSlowTmrFlag) {
-//			tcp_slowtmr();
-//			TcpSlowTmrFlag = 0;
-//		}
-//		xemacif_input(netif);
-//	}
-//
-//	/* never reached */
-//	cleanup_platform();
-//
-//	return 0;
-//}
-
-	xil_printf("Starting raw mic UDP -> 172.155.0.9:5005\r\n");
-
-        // Mulai pekerjaan utama. Fungsi biasanya tidak kembali karena loop
-        // capture berjalan terus; jika kembali, cetak kode penyebab berhenti.
-		int result = capture_loop(netif);
-		xil_printf("Capture stopped: error %d\r\n", result);
-
-		cleanup_platform();
-		return result;
-	}
+    xil_printf("Starting speaker beamforming + raw mic UDP -> %s:%d\r\n",
+               AUDIO_LAPTOP_IP,AUDIO_UDP_PORT);
+    /* capture_loop mengonfigurasi audio lalu menjalankan DMA+UDP. DHCP dan
+     * platform timers di atas tetap memakai template jaringan yang bekerja. */
+    int result=capture_loop(netif);
+    xil_printf("Capture/audio initialization stopped: error %d\r\n",result);
+    cleanup_platform();
+    return result;
+}

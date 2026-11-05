@@ -2,62 +2,66 @@
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.0.19  2019-03-26 bk=1.5019 VDI=41 GEI=35 GUI=JA:9.0 TLS
 #  -string -flagsOSRD
-preplace port DDR -pg 1 -lvl 11 -x 3260 -y 760 -defaultsOSRD
-preplace port FIXED_IO -pg 1 -lvl 11 -x 3260 -y 790 -defaultsOSRD
-preplace port lrclk_out_0 -pg 1 -lvl 11 -x 3260 -y 370 -defaultsOSRD
-preplace port sclk_out_0 -pg 1 -lvl 11 -x 3260 -y 480 -defaultsOSRD
-preplace port sdata_0_in_0 -pg 1 -lvl 0 -x -20 -y 890 -defaultsOSRD
-preplace port sdata_0_out_0 -pg 1 -lvl 11 -x 3260 -y 340 -defaultsOSRD
-preplace port sdata_1_in_0 -pg 1 -lvl 0 -x -20 -y 920 -defaultsOSRD
-preplace portBus led_clock -pg 1 -lvl 11 -x 3260 -y 60 -defaultsOSRD
-preplace inst processing_system7_0 -pg 1 -lvl 5 -x 1490 -y 810 -defaultsOSRD
-preplace inst i2s_receiver_0 -pg 1 -lvl 10 -x 3070 -y 630 -defaultsOSRD
-preplace inst ps7_0_axi_periph -pg 1 -lvl 6 -x 1890 -y 290 -defaultsOSRD
-preplace inst rst_ps7_0_50M -pg 1 -lvl 1 -x 210 -y 790 -defaultsOSRD
-preplace inst clk_wiz_0 -pg 1 -lvl 9 -x 2730 -y 360 -defaultsOSRD
-preplace inst xlconstant_0 -pg 1 -lvl 9 -x 2730 -y 460 -defaultsOSRD
-preplace inst axi_dma_0 -pg 1 -lvl 3 -x 820 -y 800 -defaultsOSRD
-preplace inst axi_smc -pg 1 -lvl 4 -x 1140 -y 800 -defaultsOSRD
-preplace inst axis_tlast_gen_0 -pg 1 -lvl 2 -x 520 -y 1000 -defaultsOSRD
-preplace inst i2s_transmitter_0 -pg 1 -lvl 10 -x 3070 -y 330 -defaultsOSRD
-preplace inst c_counter_binary_0 -pg 1 -lvl 9 -x 2730 -y 60 -defaultsOSRD
-preplace inst xlslice_0 -pg 1 -lvl 10 -x 3070 -y 60 -defaultsOSRD
-preplace inst axis_mic_pair_capture_0 -pg 1 -lvl 2 -x 520 -y 780 -defaultsOSRD
-preplace inst axis_dlms_beamformer_0 -pg 1 -lvl 6 -x 1890 -y 600 -defaultsOSRD
-preplace inst axis_noise_gate_0 -pg 1 -lvl 7 -x 2210 -y 430 -defaultsOSRD
-preplace inst axis_peq_7band_0 -pg 1 -lvl 9 -x 2730 -y 190 -defaultsOSRD
-preplace inst axis_dynamic_notch_0 -pg 1 -lvl 8 -x 2460 -y 370 -defaultsOSRD
-preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 6 20 660 NJ 660 NJ 660 NJ 660 NJ 660 1700
-preplace netloc rst_ps7_0_50M_peripheral_aresetn 1 1 9 400 860 650 900 1000 620 NJ 620 1730 70 2070 530 2340 460 2610 300 2850
-preplace netloc xlconstant_0_dout 1 9 1 2900 340n
-preplace netloc clk_wiz_0_clk_out1 1 9 1 2860 320n
-preplace netloc i2s_receiver_0_lrclk_out 1 9 2 2920 480 3220
-preplace netloc i2s_receiver_0_sclk_out 1 9 2 2910 180 3240
-preplace netloc sdata_0_in_0_1 1 0 10 0J 670 NJ 670 NJ 670 NJ 670 NJ 670 1730J 690 NJ 690 NJ 690 NJ 690 NJ
-preplace netloc processing_system7_0_FCLK_CLK0 1 0 10 30 690 390 700 640 700 990 710 1280 710 1740 510 2080 330 2340 270 2600 290 2880
-preplace netloc i2s_transmitter_0_sdata_0_out 1 10 1 NJ 340
-preplace netloc sdata_1_in_0_1 1 0 10 10J 680 NJ 680 NJ 680 NJ 680 NJ 680 1710J 700 NJ 700 NJ 700 NJ 700 2890J
-preplace netloc c_counter_binary_0_Q 1 9 1 NJ 60
-preplace netloc xlslice_0_Dout 1 10 1 NJ 60
-preplace netloc processing_system7_0_FIXED_IO 1 5 6 NJ 790 NJ 790 NJ 790 NJ 790 NJ 790 NJ
-preplace netloc processing_system7_0_M_AXI_GP0 1 5 1 1720 130n
-preplace netloc axi_dma_0_M_AXI_S2MM 1 3 1 N 780
-preplace netloc ps7_0_axi_periph_M01_AXI 1 2 5 650 60 NJ 60 NJ 60 NJ 60 2040
-preplace netloc processing_system7_0_DDR 1 5 6 NJ 770 NJ 770 NJ 770 NJ 770 NJ 770 3230J
-preplace netloc ps7_0_axi_periph_M02_AXI 1 6 4 NJ 280 NJ 280 NJ 280 2850
-preplace netloc ps7_0_axi_periph_M00_AXI 1 6 4 2080 260 NJ 260 2580J 530 2870J
-preplace netloc axi_smc_M00_AXI 1 4 1 N 800
-preplace netloc ps7_0_axi_periph_M04_AXI 1 6 3 2050 180 NJ 180 NJ
-preplace netloc ps7_0_axi_periph_M03_AXI 1 6 1 2060 300n
-preplace netloc axis_noise_gate_0_m_axis 1 7 1 2330 360n
-preplace netloc ps7_0_axi_periph_M05_AXI 1 6 2 NJ 340 N
-preplace netloc axis_dynamic_notch_0_m_axis 1 8 1 2590 160n
-preplace netloc axis_dlms_beamformer_0_m_axis 1 6 1 2090 420n
-preplace netloc axis_peq_7band_0_m_axis 1 9 1 2880 190n
-preplace netloc i2s_receiver_0_m_axis_aud 1 1 10 400 520 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 NJ 520 2890J 490 3230
-preplace netloc axis_mic_pair_capture_0_m_axis 1 2 1 N 780
-levelinfo -pg 1 -20 210 520 820 1140 1490 1890 2210 2460 2730 3070 3260
-pagesize -pg 1 -db -bbox -sgen -160 0 3410 1080
+preplace port DDR -pg 1 -lvl 13 -x 3860 -y 930 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 13 -x 3860 -y 960 -defaultsOSRD
+preplace port lrclk_out_0 -pg 1 -lvl 13 -x 3860 -y 600 -defaultsOSRD
+preplace port sclk_out_0 -pg 1 -lvl 13 -x 3860 -y 820 -defaultsOSRD
+preplace port sdata_0_in_0 -pg 1 -lvl 0 -x 0 -y 840 -defaultsOSRD
+preplace port sdata_0_out_0 -pg 1 -lvl 13 -x 3860 -y 460 -defaultsOSRD
+preplace port sdata_1_in_0 -pg 1 -lvl 0 -x 0 -y 870 -defaultsOSRD
+preplace portBus led_clock -pg 1 -lvl 13 -x 3860 -y 250 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 6 -x 1850 -y 980 -defaultsOSRD
+preplace inst i2s_receiver_0 -pg 1 -lvl 12 -x 3670 -y 790 -defaultsOSRD
+preplace inst ps7_0_axi_periph -pg 1 -lvl 7 -x 2230 -y 240 -defaultsOSRD
+preplace inst rst_ps7_0_50M -pg 1 -lvl 1 -x 200 -y 1020 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 11 -x 3320 -y 540 -defaultsOSRD
+preplace inst xlconstant_0 -pg 1 -lvl 11 -x 3320 -y 640 -defaultsOSRD
+preplace inst axi_dma_0 -pg 1 -lvl 4 -x 1170 -y 1080 -defaultsOSRD
+preplace inst axi_smc -pg 1 -lvl 5 -x 1500 -y 900 -defaultsOSRD
+preplace inst axis_tlast_gen_0 -pg 1 -lvl 2 -x 550 -y 950 -defaultsOSRD
+preplace inst i2s_transmitter_0 -pg 1 -lvl 12 -x 3670 -y 450 -defaultsOSRD
+preplace inst c_counter_binary_0 -pg 1 -lvl 11 -x 3320 -y 250 -defaultsOSRD
+preplace inst xlslice_0 -pg 1 -lvl 12 -x 3670 -y 250 -defaultsOSRD
+preplace inst axis_noise_gate_0 -pg 1 -lvl 9 -x 2800 -y 370 -defaultsOSRD
+preplace inst axis_dynamic_notch_0 -pg 1 -lvl 10 -x 3060 -y 360 -defaultsOSRD
+preplace inst axis_broadcaster_0 -pg 1 -lvl 2 -x 550 -y 780 -defaultsOSRD
+preplace inst beamformer_0 -pg 1 -lvl 8 -x 2550 -y 370 -defaultsOSRD
+preplace inst axis_mic_pair_capture_0 -pg 1 -lvl 3 -x 850 -y 1030 -defaultsOSRD
+preplace inst axis_peq_7band_0 -pg 1 -lvl 11 -x 3320 -y 380 -defaultsOSRD
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 7 20 1180 NJ 1180 NJ 1180 NJ 1180 NJ 1180 NJ 1180 2060
+preplace netloc rst_ps7_0_50M_peripheral_aresetn 1 1 11 400 1050 720 1110 990 920 1340 510 NJ 510 2080 510 2430 470 2680 470 2940 450 3190 470 3470
+preplace netloc xlconstant_0_dout 1 11 1 3500 460n
+preplace netloc clk_wiz_0_clk_out1 1 11 1 3490 440n
+preplace netloc i2s_receiver_0_lrclk_out 1 11 2 3510 600 3840
+preplace netloc i2s_receiver_0_sclk_out 1 11 2 3520 610 3830
+preplace netloc sdata_0_in_0_1 1 0 12 NJ 840 380J 860 730J 820 NJ 820 NJ 820 NJ 820 NJ 820 NJ 820 NJ 820 NJ 820 NJ 820 3440J
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 12 20 920 390 1030 730 950 980 950 1360 990 1640 1080 2070 520 2420 460 2670 460 2930 460 3180 480 3460
+preplace netloc i2s_transmitter_0_sdata_0_out 1 12 1 NJ 460
+preplace netloc sdata_1_in_0_1 1 0 12 NJ 870 NJ 870 720J 810 NJ 810 NJ 810 NJ 810 NJ 810 NJ 810 NJ 810 NJ 810 NJ 810 3450J
+preplace netloc c_counter_binary_0_Q 1 11 1 NJ 250
+preplace netloc xlslice_0_Dout 1 12 1 NJ 250
+preplace netloc processing_system7_0_FIXED_IO 1 6 7 NJ 960 NJ 960 NJ 960 NJ 960 NJ 960 NJ 960 NJ
+preplace netloc processing_system7_0_M_AXI_GP0 1 6 1 2060 60n
+preplace netloc axi_dma_0_M_AXI_S2MM 1 4 1 1350 880n
+preplace netloc ps7_0_axi_periph_M01_AXI 1 3 5 1000 500 NJ 500 NJ 500 NJ 500 2380
+preplace netloc processing_system7_0_DDR 1 6 7 2080J 930 NJ 930 NJ 930 NJ 930 NJ 930 NJ 930 NJ
+preplace netloc ps7_0_axi_periph_M02_AXI 1 7 5 2390J 190 NJ 190 NJ 190 NJ 190 3460
+preplace netloc ps7_0_axi_periph_M00_AXI 1 7 5 NJ 180 NJ 180 NJ 180 NJ 180 3480
+preplace netloc axi_smc_M00_AXI 1 5 1 1640 900n
+preplace netloc ps7_0_axi_periph_M04_AXI 1 7 4 NJ 260 NJ 260 NJ 260 3200
+preplace netloc ps7_0_axi_periph_M03_AXI 1 7 2 NJ 240 2670
+preplace netloc axis_noise_gate_0_m_axis 1 9 1 2920 350n
+preplace netloc ps7_0_axi_periph_M05_AXI 1 7 3 NJ 280 NJ 280 2920
+preplace netloc axis_dynamic_notch_0_m_axis 1 10 1 3190 350n
+preplace netloc axis_peq_7band_0_m_axis 1 11 1 N 380
+preplace netloc axis_mic_pair_capture_0_m_axis 1 3 1 970 1030n
+preplace netloc beamformer_0_m_axis 1 8 1 2670 360n
+preplace netloc ps7_0_axi_periph_M06_AXI 1 7 1 2430 300n
+preplace netloc axis_broadcaster_0_M01_AXIS 1 2 6 700J 480 NJ 480 NJ 480 NJ 480 NJ 480 2410
+preplace netloc axis_broadcaster_0_M00_AXIS 1 2 1 710 770n
+preplace netloc i2s_receiver_0_m_axis_aud 1 1 12 400 490 NJ 490 NJ 490 NJ 490 NJ 490 NJ 490 2400J 170 NJ 170 NJ 170 NJ 170 NJ 170 3820
+levelinfo -pg 1 0 200 550 850 1170 1500 1850 2230 2550 2800 3060 3320 3670 3860
+pagesize -pg 1 -db -bbox -sgen -140 0 4010 1200
 "
 }
 {

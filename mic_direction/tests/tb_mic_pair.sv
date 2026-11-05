@@ -31,9 +31,11 @@ module tb_mic_pair;
         3: if($signed(outdata)!=-8388608) $fatal(1,"negative limit");
         4: if($signed(outdata)!=300) $fatal(1,"next packet mic1");
         5: if($signed(outdata)!=400) $fatal(1,"next packet mic2");
+        6: if($signed(outdata)!=500) $fatal(1,"next pair mic1");
+        7: if($signed(outdata)!=-600) $fatal(1,"next pair mic2");
         default: $fatal(1,"extra output");
       endcase
-      if(last !== (seen==3)) $fatal(1,"TLAST placement");
+      if(last !== (seen==3 || seen==7)) $fatal(1,"TLAST placement");
       seen=seen+1;
     end
   end
@@ -50,8 +52,9 @@ module tb_mic_pair;
     send(0,24'sd100); send(1,24'sd777); send(2,-24'sd200); send(3,24'sd888);
     send(0,24'sd8388607); send(1,24'sd777); send(2,-24'sd8388608);
     send(0,24'sd300); send(2,24'sd400);
-    repeat(20) @(posedge clk);
-    if(seen!=6) $fatal(1,"missing output");
+    send(0,24'sd500); send(2,-24'sd600);
+    repeat(50) @(posedge clk);
+    if(seen!=8) $fatal(1,"missing output");
     $display("PASS: pairing, PCM sign, TLAST, ignored channels and AXI stalls");
     $finish;
   end

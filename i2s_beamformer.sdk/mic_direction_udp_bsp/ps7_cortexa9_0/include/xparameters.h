@@ -278,6 +278,11 @@
 #define XPAR_PS7_SLCR_0_S_AXI_HIGHADDR 0xF8000FFF
 
 
+/* Definitions for peripheral BEAMFORMER_0 */
+#define XPAR_BEAMFORMER_0_BASEADDR 0x43C50000
+#define XPAR_BEAMFORMER_0_HIGHADDR 0x43C5FFFF
+
+
 /******************************************************************/
 
 /* Definitions for driver I2SRX */

@@ -1,0 +1,14 @@
+# Supported CDT extension hook: generated Debug/Release makefiles include this.
+# No edits to generated src/subdir.mk. This also works before SDK GUI Refresh.
+# Once CDT discovers the files itself, sort removes duplicate object entries.
+AUDIO_EXTRA_STEMS := audio_path steer_beamformer noise_gate_controller peq_controller dynamic_notch_controller
+OBJS := $(sort $(OBJS) $(addprefix ./src/,$(addsuffix .o,$(AUDIO_EXTRA_STEMS))))
+C_DEPS := $(sort $(C_DEPS) $(addprefix ./src/,$(addsuffix .d,$(AUDIO_EXTRA_STEMS))))
+ifeq ($(filter -lm,$(LIBS)),)
+LIBS += -lm
+endif
+
+# Relink after rebuilding BSP libraries, even when application C files did not
+# change (for example after applying the S9 Broadcom PHY patch).
+.DEFAULT_GOAL := all
+mic_direction_udp.elf: ../../mic_direction_udp_bsp/ps7_cortexa9_0/lib/liblwip4.a ../../mic_direction_udp_bsp/ps7_cortexa9_0/lib/libxil.a

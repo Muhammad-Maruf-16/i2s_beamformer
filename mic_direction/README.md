@@ -1,5 +1,33 @@
 # Dua mic mentah → DMA → Ethernet UDP → Python
 
+## Update capture non-blocking (4 November 2026)
+
+`axis_mic_pair_capture.v` sekarang memakai **dua buffer blok lengkap**, masing-
+masing 128 pasangan (1024 byte). Port, parameter, urutan PCM, TLAST dan protokol
+UDP tidak berubah. `s_axis_tready` selalu 1, jadi DMA lambat pada cabang laptop
+tidak lagi menahan Broadcaster/cabang speaker melalui capture ini.
+
+Jika kedua buffer terisi pada awal blok, seluruh blok baru dibuang. Blok yang
+sedang ditulis/dikirim tidak ditimpa; buffer yang sedang dibaca baru dibebaskan
+sesudah handshake word TLAST. Jika DMA pulih di tengah blok yang dibuang,
+capture tetap menunggu batas blok berikutnya. Ini mencegah campuran frame.
+Blok parsial tidak ditampilkan ke DMA. Efeknya: ada tambahan waktu pengumpulan
+128 frame (sekitar 2.67ms), dan antarblok monitoring tetap bisa ada gap.
+
+**Langkah setelah source diganti:** simpan, Refresh Module Reference capture
+di Vivado bila ditandai berubah, Validate Design, generate bitstream ulang,
+export hardware include bitstream ke platform SDK aktif, program FPGA lagi.
+Tidak perlu mengganti routing atau menambahkan port/register capture. Ukuran
+DMA tetap 1024 byte. FIFO eksternal boleh dipertahankan tetapi tidak wajib.
+
+Jumlah blok yang dibuang di PL **belum diekspos melalui port lama**. `lost` dan
+`malformed` Python bukan counter drop PL; sequence UDP hanya menghitung blok
+yang dicoba dikirim SDK. Flag snapshot/gaps tetap berlaku. Perubahan ini tidak
+menyelesaikan malformed yang sudah muncul sebelumnya secara otomatis.
+
+Perubahan hanya pada capture; aplikasi SDK tetap perlu mengaktifkan TX,
+beamformer, dan kontrol audio untuk speaker+visualisasi bersamaan.
+
 Paket ini disiapkan untuk **Vivado/SDK 2019.1**, project `antminer_s9/i2s_beamformer`.
 Tidak mengubah block design, `.xpr`, constraint, BSP, atau aplikasi aktif.
 Verilog hanya ditaruh di `i2s_beamformer.srcs/sources_1/new/axis_mic_pair_capture.v`.
@@ -47,8 +75,9 @@ I2S Receiver / M_AXIS_AUD
 
 Modul menjaga urutan Mic1 lalu Mic2, sign-extend payload AES3 24 bit menjadi
 signed int32. Metadata AES3 tidak dikirim sebagai sampel. Pairing dimulai dari
-Mic1 supaya awal capture tidak tertukar. Backpressure AXI dihormati; jika sumber
-I2S/FIFO overflow, kontinuitas capture tidak dijamin.
+Mic1 supaya awal capture tidak tertukar. Output menghormati backpressure DMA,
+input tetap ready. Kontinuitas antarblok tidak dijamin: blok dibuang utuh saat
+buffer penuh. Kesalahan/overflow pada sumber I2S sendiri tetap perlu diperiksa.
 
 ## 2. Ethernet S9 melalui GUI PS, bukan jalur Ethernet di PL
 
@@ -153,8 +182,10 @@ lalu dekat Mic1 dan Mic2. Bila tanda terbalik, periksa urutan/TID/pin L/R.
   nominal sample index **bukan timestamp hardware**. Python menghitung korelasi
   per blok, tidak menyambung blok yang mungkin terputus. Untuk kontinuitas
   penuh gunakan SG cyclic/ring DMA + double buffering dan deteksi overflow.
-- FIFO menyerap jeda singkat; ia tidak menjamin tidak overflow bila CPU/network
-  tertahan. DMA timeout/error menghentikan capture agar kegagalan terlihat.
+- Buffer capture menyerap dua blok. Jika CPU/network tertahan lebih lama,
+  blok input berikutnya dibuang utuh tanpa menahan audio. DMA timeout/error
+  menghentikan loop CPU agar kegagalan terlihat; hardware capture tetap tidak
+  menahan cabang speaker meskipun CPU berhenti mengambil data.
 - Estimator awal memakai normalized cross-correlation, interpolasi puncak,
   batas delay fisik. Kondisi hening, clipping, korelasi lemah ditandai uncertain.
   Suara tonal/reverberasi/banyak sumber masih bisa menghasilkan arah salah,
@@ -174,3 +205,7 @@ Testbench `tests/tb_mic_pair.sv` memeriksa urutan kanal, signed PCM24,
 TLAST per paket, dan kestabilan output saat backpressure. Jalankan sebagai
 simulation top di salinan project / simulator, bukan synthesis source.
 File ini tidak otomatis dimasukkan ke project.
+
+Test tambahan `tests/tb_capture_nonblocking.sv` menguji buffer penuh, DMA pulih
+di tengah blok drop, reset, dan input selalu ready (ukuran 1, 3, 128 pasangan).
+Jalankan keduanya tanpa memodifikasi project: `python3 tests/run_capture_tests.py`.

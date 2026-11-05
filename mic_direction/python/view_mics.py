@@ -107,6 +107,7 @@ def main():
     if args.spacing_cm <= 0: parser.error('spacing must be positive')
     import matplotlib.pyplot as plt
     from matplotlib.animation import FuncAnimation
+    from matplotlib.widgets import Slider
     # TAHAP 3 - socket penerima IPv4 UDP. Bind 0.0.0.0 menerima dari semua
     # interface laptop pada port ini. Program belum memfilter IP pengirim;
     # datagram lain ke port sama juga masuk pemeriksaan decode().
@@ -119,12 +120,26 @@ def main():
     sock.setblocking(False)
     recording = open(args.save,'ab') if args.save else None
     # Tiga panel: sampel mentah per mic, skor terhadap delay, titik arah.
-    # Skala amplitudo tetap [-1,1], jadi mic pelan tampak datar walau tidak nol.
-    fig, axes = plt.subplots(3,1,figsize=(11,9))
+    # Satu baris tambahan khusus slider zoom PCM, terpisah dari panel analisis.
+    fig = plt.figure(figsize=(11,9))
+    grid = fig.add_gridspec(4,1,height_ratios=[3,.35,3,3])
+    axes = [fig.add_subplot(grid[row]) for row in (0,2,3)]
+    zoom_axis = fig.add_subplot(grid[1])
     wave1, = axes[0].plot([],[],label='Mic 1')
     wave2, = axes[0].plot([],[],label='Mic 2',alpha=.7)
     axes[0].set(xlabel='Time (ms)',ylabel='PCM / full scale',ylim=(-1,1))
     axes[0].legend(loc='upper right')
+    # Posisi slider log10: 0..4 berarti zoom x1..x10000. Kedua kanal memakai
+    # batas Y yang sama; sampel asli, estimasi delay, dan rekaman tidak diubah.
+    # Hanya rentang sumbu dipersempit, jadi angka tick tetap PCM/full scale asli.
+    pcm_zoom = Slider(zoom_axis,'PCM zoom',0.,4.,valinit=0.)
+    pcm_zoom.valtext.set_text('x1')
+    def set_pcm_zoom(log_zoom):
+        factor = 10. ** log_zoom
+        axes[0].set_ylim(-1./factor,1./factor)
+        pcm_zoom.valtext.set_text(f'x{factor:,.0f}')
+        fig.canvas.draw_idle()
+    pcm_zoom.on_changed(set_pcm_zoom)
     corr, = axes[1].plot([],[],'o-')
     marker = axes[1].axvline(0,color='red')
     axes[1].set(xlabel='Delay (samples); positive = Mic 1 first',ylabel='Correlation',ylim=(-1,1.05))

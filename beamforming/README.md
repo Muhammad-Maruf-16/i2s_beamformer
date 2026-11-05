@@ -1,5 +1,9 @@
 # Beamformer dua mic, arah dapat diubah dari SDK
 
+**Aplikasi SDK aktif sudah digabung:** lihat [SDK_INTEGRATION.md](SDK_INTEGRATION.md).
+File tidak perlu dipindah lagi secara manual. Panduan SDK di bawah menjelaskan
+cara memasangnya dari awal pada aplikasi lain.
+
 Modul baru: `../i2s_beamformer.srcs/sources_1/new/axis_steer_beamformer.v`.
 Tidak otomatis dimasukkan ke `.xpr` atau Block Design. Routing lewat GUI oleh user.
 Modul beamformer lama tidak ditimpa. Capture/UDP yang sudah bekerja tidak diubah.
@@ -59,11 +63,13 @@ dua nilai full-scale tidak overflow. Tidak ada boost gain pada modul baru.
 
 Untuk analisis arah di Python SAMBIL speaker berjalan, baru tambah broadcaster
 RX menjadi dua cabang. Jangan hubungkan satu output stream ke dua slave manual.
-Broadcaster standar menahan semua cabang jika salah satunya macet; FIFO saja
-tidak menjamin aman bila capture/UDP berhenti. Jangan menjalankan app capture
-lama dan menganggap audio pasti tetap lancar tanpa desain cabang yang memadai.
-Versi awal ini memprioritaskan mode speaker terpisah; raw capture tetap tersedia
-untuk digunakan kembali ketika user mengganti routing.
+Broadcaster standar menahan semua cabang jika salah satunya macet. Capture
+terbaru `axis_mic_pair_capture.v` sudah memakai dua buffer dan input selalu
+ready: blok monitoring dibuang utuh saat penuh, sehingga DMA tidak menahan
+speaker lewat cabang capture. Pertahankan capture di antara Broadcaster dan
+DMA; jangan sambungkan DMA langsung sebagai cabang. Lihat update pada
+`../mic_direction/README.md`. Aplikasi capture UDP tetap perlu ditambah startup
+TX dan kontrol audio sebelum speaker+grafik bisa bekerja bersamaan.
 
 ## 2. SDK: library kontrol
 

@@ -1,5 +1,33 @@
 # Pemeriksaan 4 November 2026
 
+## Update: capture dua buffer non-blocking
+
+- RTL `axis_mic_pair_capture.v` diganti dengan dua buffer blok. Input READY
+  selalu 1; keputusan drop saat awal blok, tidak pernah mengirim blok parsial.
+  Port, parameter, PCM int32 interleaved dan TLAST per 128 pasangan tetap sama.
+- XSim2019.1 basic test PASS (765ns): sign extension batas PCM24, TID,
+  TLAST, dan output stabil saat backpressure.
+- XSim stress PASS (1057280ns), parameter 1, 3, 128 pasangan: kedua bank penuh,
+  input tidak tertahan, blok drop utuh, pulih tengah blok tidak menyelipkan frame,
+  blok belum lengkap tidak muncul di DMA, sustained input/output, reset dengan
+  buffer penuh/output stall, urutan dan isi seluruh output lewat scoreboard.
+- Runner `python3 tests/run_capture_tests.py` tidak mengubah project, artefak
+  simulator di temporary directory. Memeriksa marker PASS karena XSim dapat
+  mengembalikan exit code 0 sesudah `$fatal`.
+- Empat unit test Python estimator/protokol tetap PASS.
+- OOC synthesis Vivado2019.1 xc7z010clg400-1, default 128 pasangan: PASS,
+  0 errors/critical warnings, 64 LUT, 82 FF, 2 RAMB36E1, 0 DSP48.
+  WNS estimasi internal 50MHz +15.932ns, belum place/route dan belum constraint
+  input/output sistem lengkap. Warning READY konstan dan metadata AES3 tidak
+  dipakai memang sesuai desain. Laporan di `tests/results/capture_*_synth.rpt`.
+- Belum diprogram/dites di board. User perlu regenerate bitstream dan program
+  ulang; jangan hanya build ELF. Startup TX/kontrol audio di SDK belum ditambah
+  pada perubahan ini. Tidak mengubah BD/XPR atau aplikasi/BSP aktif.
+- Counter drop PL belum diekspos. Statistik Python tidak otomatis menghitung
+  blok yang sengaja dibuang PL; format UDP tetap tidak berubah.
+
+## Pemeriksaan paket awal (sebelum update buffer)
+
 - Python: 4 unit tests PASS (signed packet decode, corrupt length rejection,
   positive/negative delay, center, silence, uncorrelated signals).
 - Matplotlib/NumPy tersedia dan berhasil render dengan backend Agg dalam

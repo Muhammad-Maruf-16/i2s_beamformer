@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
--- Date        : Tue Nov  3 13:19:12 2026
+-- Date        : Wed Nov  4 17:00:44 2026
 -- Host        : maruf-ThinkPad-T470p running 64-bit Ubuntu 24.04.3 LTS
--- Command     : write_vhdl -force -mode funcsim -rename_top design_1_i2s_receiver_0_0 -prefix
---               design_1_i2s_receiver_0_0_ design_1_i2s_receiver_0_0_sim_netlist.vhdl
+-- Command     : write_vhdl -force -mode funcsim
+--               /home/maruf/fpga/antminer_s9/i2s_beamformer/i2s_beamformer.srcs/sources_1/bd/design_1/ip/design_1_i2s_receiver_0_0/design_1_i2s_receiver_0_0_sim_netlist.vhdl
 -- Design      : design_1_i2s_receiver_0_0
 -- Purpose     : This VHDL netlist is a functional simulation representation of the design and should not be modified or
 --               synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -25,6 +25,8 @@ entity design_1_i2s_receiver_0_0_xpm_cdc_array_single is
   attribute DEST_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_array_single : entity is 2;
   attribute INIT_SYNC_FF : integer;
   attribute INIT_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_array_single : entity is 0;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_cdc_array_single : entity is "xpm_cdc_array_single";
   attribute SIM_ASSERT_CHK : integer;
   attribute SIM_ASSERT_CHK of design_1_i2s_receiver_0_0_xpm_cdc_array_single : entity is 0;
   attribute SRC_INPUT_REG : integer;
@@ -6395,6 +6397,8 @@ entity design_1_i2s_receiver_0_0_xpm_cdc_gray is
   attribute DEST_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_gray : entity is 2;
   attribute INIT_SYNC_FF : integer;
   attribute INIT_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_gray : entity is 1;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_cdc_gray : entity is "xpm_cdc_gray";
   attribute REG_OUTPUT : integer;
   attribute REG_OUTPUT of design_1_i2s_receiver_0_0_xpm_cdc_gray : entity is 0;
   attribute SIM_ASSERT_CHK : integer;
@@ -8227,6 +8231,8 @@ entity design_1_i2s_receiver_0_0_xpm_cdc_single is
   attribute DEST_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_single : entity is 2;
   attribute INIT_SYNC_FF : integer;
   attribute INIT_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_single : entity is 0;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_cdc_single : entity is "xpm_cdc_single";
   attribute SIM_ASSERT_CHK : integer;
   attribute SIM_ASSERT_CHK of design_1_i2s_receiver_0_0_xpm_cdc_single : entity is 0;
   attribute SRC_INPUT_REG : integer;
@@ -8799,6 +8805,8 @@ entity design_1_i2s_receiver_0_0_xpm_cdc_sync_rst is
   attribute INIT of design_1_i2s_receiver_0_0_xpm_cdc_sync_rst : entity is "0";
   attribute INIT_SYNC_FF : integer;
   attribute INIT_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_sync_rst : entity is 1;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_cdc_sync_rst : entity is "xpm_cdc_sync_rst";
   attribute SIM_ASSERT_CHK : integer;
   attribute SIM_ASSERT_CHK of design_1_i2s_receiver_0_0_xpm_cdc_sync_rst : entity is 0;
   attribute VERSION : integer;
@@ -8933,6 +8941,8 @@ entity design_1_i2s_receiver_0_0_xpm_counter_updn is
     wr_pntr_plus1_pf_carry : in STD_LOGIC;
     wr_clk : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_counter_updn : entity is "xpm_counter_updn";
 end design_1_i2s_receiver_0_0_xpm_counter_updn;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_xpm_counter_updn is
@@ -10961,6 +10971,8 @@ entity design_1_i2s_receiver_0_0_xpm_fifo_reg_bit is
     prog_full : in STD_LOGIC;
     wr_en : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_fifo_reg_bit : entity is "xpm_fifo_reg_bit";
 end design_1_i2s_receiver_0_0_xpm_fifo_reg_bit;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_xpm_fifo_reg_bit is
@@ -11037,6 +11049,8 @@ entity design_1_i2s_receiver_0_0_xpm_fifo_reg_vec is
     D : in STD_LOGIC_VECTOR ( 6 downto 0 );
     wr_clk : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_fifo_reg_vec : entity is "xpm_fifo_reg_vec";
 end design_1_i2s_receiver_0_0_xpm_fifo_reg_vec;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_xpm_fifo_reg_vec is
@@ -11778,6 +11792,8 @@ entity design_1_i2s_receiver_0_0_xpm_memory_base is
   attribute MESSAGE_CONTROL of design_1_i2s_receiver_0_0_xpm_memory_base : entity is 0;
   attribute NUM_CHAR_LOC : integer;
   attribute NUM_CHAR_LOC of design_1_i2s_receiver_0_0_xpm_memory_base : entity is 0;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_memory_base : entity is "xpm_memory_base";
   attribute P_ECC_MODE : string;
   attribute P_ECC_MODE of design_1_i2s_receiver_0_0_xpm_memory_base : entity is "no_ecc";
   attribute P_ENABLE_BYTE_WRITE_A : integer;
@@ -12124,6 +12140,8 @@ entity design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_aes_enc is
     E : in STD_LOGIC_VECTOR ( 0 to 0 );
     \rChannelStatusIn_reg[191]_0\ : in STD_LOGIC_VECTOR ( 191 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_aes_enc : entity is "i2s_receiver_v1_0_3_aes_enc";
 end design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_aes_enc;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_aes_enc is
@@ -17585,6 +17603,8 @@ entity design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_axi is
     s_axi_ctrl_arvalid : in STD_LOGIC;
     s_axi_ctrl_araddr : in STD_LOGIC_VECTOR ( 7 downto 0 )
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_axi : entity is "i2s_receiver_v1_0_3_axi";
 end design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_axi;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_axi is
@@ -22472,6 +22492,8 @@ entity design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_ser is
     \genblk3[0].mclk_rAudValid_reg[0]\ : in STD_LOGIC;
     sdata_0_in : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_ser : entity is "i2s_receiver_v1_0_3_ser";
 end design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_ser;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_ser is
@@ -25901,6 +25923,8 @@ entity design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_timgen is
     rSClkDelayed : in STD_LOGIC;
     rLRClk1_carry_0 : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_timgen : entity is "i2s_receiver_v1_0_3_timgen";
 end design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_timgen;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_timgen is
@@ -27116,6 +27140,8 @@ entity design_1_i2s_receiver_0_0_xpm_cdc_pulse is
   attribute DEST_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_pulse : entity is 4;
   attribute INIT_SYNC_FF : integer;
   attribute INIT_SYNC_FF of design_1_i2s_receiver_0_0_xpm_cdc_pulse : entity is 0;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_cdc_pulse : entity is "xpm_cdc_pulse";
   attribute REG_OUTPUT : integer;
   attribute REG_OUTPUT of design_1_i2s_receiver_0_0_xpm_cdc_pulse : entity is 1;
   attribute RST_USED : integer;
@@ -27467,6 +27493,8 @@ entity design_1_i2s_receiver_0_0_xpm_fifo_rst is
     \guf.underflow_i_reg\ : in STD_LOGIC;
     rd_en : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_fifo_rst : entity is "xpm_fifo_rst";
 end design_1_i2s_receiver_0_0_xpm_fifo_rst;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_xpm_fifo_rst is
@@ -28042,6 +28070,8 @@ entity design_1_i2s_receiver_0_0_xpm_fifo_base is
   attribute FULL_RESET_VALUE of design_1_i2s_receiver_0_0_xpm_fifo_base : entity is 1;
   attribute FULL_RST_VAL : string;
   attribute FULL_RST_VAL of design_1_i2s_receiver_0_0_xpm_fifo_base : entity is "1'b1";
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_fifo_base : entity is "xpm_fifo_base";
   attribute PE_THRESH_ADJ : integer;
   attribute PE_THRESH_ADJ of design_1_i2s_receiver_0_0_xpm_fifo_base : entity is 8;
   attribute PE_THRESH_MAX : integer;
@@ -29294,6 +29324,8 @@ entity design_1_i2s_receiver_0_0_xpm_fifo_async is
   attribute FIFO_WRITE_DEPTH of design_1_i2s_receiver_0_0_xpm_fifo_async : entity is 128;
   attribute FULL_RESET_VALUE : integer;
   attribute FULL_RESET_VALUE of design_1_i2s_receiver_0_0_xpm_fifo_async : entity is 1;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_xpm_fifo_async : entity is "xpm_fifo_async";
   attribute PROG_EMPTY_THRESH : integer;
   attribute PROG_EMPTY_THRESH of design_1_i2s_receiver_0_0_xpm_fifo_async : entity is 10;
   attribute PROG_FULL_THRESH : integer;
@@ -29520,6 +29552,8 @@ entity design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_async_fifo is
     m_axis_aud_tready : in STD_LOGIC;
     follower_empty_reg : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_async_fifo : entity is "i2s_receiver_v1_0_3_async_fifo";
 end design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_async_fifo;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_async_fifo is
@@ -29922,6 +29956,8 @@ entity design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_sys is
     m_axis_aud_aresetn : in STD_LOGIC;
     m_axis_aud_tready : in STD_LOGIC
   );
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_sys : entity is "i2s_receiver_v1_0_3_sys";
 end design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_sys;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3_sys is
@@ -32908,6 +32944,8 @@ entity design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3 is
   attribute C_IS_MASTER of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3 : entity is 1;
   attribute C_NUM_CHANNELS : integer;
   attribute C_NUM_CHANNELS of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3 : entity is 2;
+  attribute ORIG_REF_NAME : string;
+  attribute ORIG_REF_NAME of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3 : entity is "i2s_receiver_v1_0_3";
 end design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3;
 
 architecture STRUCTURE of design_1_i2s_receiver_0_0_i2s_receiver_v1_0_3 is
