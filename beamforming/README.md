@@ -1,5 +1,8 @@
 # Beamformer dua mic, arah dapat diubah dari SDK
 
+Panduan rencana peningkatan menjadi empat mic: [PANDUAN_4_MIC.md](PANDUAN_4_MIC.md).
+Panduan tersebut belum berarti implementasi empat mic sudah diterapkan.
+
 **Aplikasi SDK aktif sudah digabung:** lihat [SDK_INTEGRATION.md](SDK_INTEGRATION.md).
 File tidak perlu dipindah lagi secara manual. Panduan SDK di bawah menjelaskan
 cara memasangnya dari awal pada aplikasi lain.
