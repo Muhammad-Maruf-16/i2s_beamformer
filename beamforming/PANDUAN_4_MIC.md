@@ -11,7 +11,7 @@ Empat mic direkam serentak. Data mentah keempatnya dikirim melalui LAN untuk gra
 ```text
 4 INMP441, clock bersama
           |
-I2S Receiver: 4 kanal audio, 2 pin SD
+I2S Receiver: 8 slot audio, 4 pin SD; ambil slot Left saja
           |
 AXI Stream Broadcaster
           |
@@ -30,8 +30,8 @@ Target awal: susunan lurus untuk memilih arah sisi Mic1, tengah, atau sisi Mic4.
 
 | Bagian | Kondisi sekarang | Tindakan untuk 4 mic |
 |---|---|---|
-| I2S Receiver `i2s_receiver_0` | `C_NUM_CHANNELS=4`, SD0 dan SD1 tersedia | Pertahankan, verifikasi empat slot keluar |
-| Pin input SD | SD0=V16, SD1=W16 pada XDC proyek | Tidak perlu pin SD tambahan untuk skema dua mic per SD |
+| I2S Receiver `i2s_receiver_0` | `C_NUM_CHANNELS=4`, SD0 dan SD1 tersedia | Ubah menjadi8 slot audio agar SD0–SD3 tersedia |
+| Pin input SD | SD0=V16, SD1=W16 pada XDC proyek | Tambah SD2 danSD3; pin fisik ditentukan dari skematik/konektor |
 | Clock mic | SCLK=Y19, WS/LRCLK=Y18 pada XDC | Dipakai bersama oleh empat mic |
 | Broadcaster | Dua cabang, TDATA32 dan TID3 | Pertahankan semua identitas kanal |
 | Capture `axis_mic_pair_capture.v` | Hanya mengambil TID0 dan TID2 | Ganti dengan pengumpul empat kanal |
@@ -40,7 +40,7 @@ Target awal: susunan lurus untuk memilih arah sisi Mic1, tengah, atau sisi Mic4.
 | SDK aktif | `i2s_beamformer.sdk/mic_direction_udp/src/` | Perluas format buffer, paket, kontrol beamformer |
 | Python | `mic_direction/python/view_mics.py`, dua kanal | Tambah decode dan tampilan empat kanal |
 
-**Empat kanal audio bukan empat pin SD.** Pada konfigurasi ini satu pin SD membawa slot Left dan Right. Dua pin SD cukup untuk empat mic.
+**Pilihan pengguna: setiap mic memakai SD sendiri dan semua L/R diikat ke GND (Left).** Receiver memerlukan empat jalur I²S, masing-masing tetap memiliki slot Left/Right: total8 slot audio. Yang diproses hanya empat slot Left, yaitu TID0/2/4/6. Slot Right diabaikan; jangan menganggap datanya valid atau selalu nol.
 
 Nama port dan pin di atas berasal dari proyek, bukan nomor pin pada konektor papan. Cocokkan lokasi konektor dengan skematik sebelum menyambung. Pertahankan verifikasi tegangan bank PL; jangan menganggap tegangan bank MIO Ethernet sama dengan bank pin mic.
 
@@ -64,11 +64,11 @@ Sudut 0 derajat adalah arah tegak lurus garis array. Positif menuju sisi Mic1, n
 | Mic fisik | Pilihan L/R | Jalur SD ke FPGA | Kanal/TID yang diharapkan |
 |---|---|---|---|
 | Mic1 | GND / Left | `sdata_0_in_0`, V16 | 0 |
-| Mic2 | 3,3 V / Right | `sdata_0_in_0`, V16 | 1 |
-| Mic3 | GND / Left | `sdata_1_in_0`, W16 | 2 |
-| Mic4 | 3,3 V / Right | `sdata_1_in_0`, W16 | 3 |
+| Mic2 | GND / Left | `sdata_1_in_0`, W16 | 2 |
+| Mic3 | GND / Left | `sdata_2_in_0`, pin belum ditentukan | 4 |
+| Mic4 | GND / Left | `sdata_3_in_0`, pin belum ditentukan | 6 |
 
-Setiap pasangan berbagi SD karena kedua INMP441 harus mengeluarkan data pada slot berbeda dan melepas jalur di luar slotnya. **Jangan menyatukan SD dua mic yang sama-sama disetel Left atau sama-sama Right.** Periksa pula modul breakout: pastikan tidak ada buffer keluaran tambahan yang menghalangi penggunaan SD bersama.
+**Keempat SD tidak disatukan.** Masing-masing keluaran SD mic menuju satu masukan FPGA. Hanya SCK, WS, suplai, dan ground yang bersama. Jangan menyatukan SD mic yang sama-sama Left.
 
 Untuk semua mic:
 
@@ -79,7 +79,7 @@ Untuk semua mic:
 - Pasang decoupling dekat mic sesuai modul/datasheet. Gunakan kabel clock pendek dan ground yang baik.
 - INMP441 tidak membutuhkan pin MCLK; `aud_mclk` adalah clock untuk IP audio di FPGA.
 
-**Perubahan identitas mic lama:** sebelumnya mic kedua berada di SD1 Left, yaitu TID2. Dalam penamaan empat mic di atas, perangkat pada slot itu menjadi Mic3. Sesuaikan label dan posisi fisik agar tidak tertukar.
+**Identitas mic lama tetap:** Mic1=SD0 Left/TID0, Mic2=SD1 Left/TID2. Tambahkan Mic3=SD2 Left/TID4 dan Mic4=SD3 Left/TID6.
 
 Lakukan pemasangan ketika daya mati. Setelah wiring selesai, uji capture dahulu dengan speaker keluaran dimatikan agar tidak ada feedback.
 
@@ -88,7 +88,7 @@ Lakukan pemasangan ketika daya mati. Setelah wiring selesai, uji capture dahulu 
 Kerjakan bertahap:
 
 1. Cadangkan proyek dan catat hasil dua mic yang sudah berjalan.
-2. Wiring empat mic dan pertahankan konfigurasi receiver empat kanal.
+2. Wiring empat mic pada empat SD, lalu ubah receiver menjadi8 slot audio.
 3. Implementasikan capture empat kanal, SDK pengiriman, dan Python penerima.
 4. Pastikan empat mic terbaca benar sebelum mengubah beamformer.
 5. Implementasikan beamformer empat mic beserta library kontrolnya.
@@ -102,10 +102,11 @@ Selama tahap capture, cabang beamformer dua mic lama masih hanya memproses TID0 
 
 1. Buka Block Design `design_1`.
 2. Klik dua kali `i2s_receiver_0`.
-3. Pastikan jumlah kanal audio tetap 4. Periksa bahwa port SD0 dan SD1 tersedia.
+3. Ubah jumlah kanal audio menjadi8 (`C_NUM_CHANNELS=8`), sehingga empat port SD0, SD1, SD2, SD3 tersedia. Jangan memilih4 karena pada proyek ini berarti hanya dua jalur SD.
 4. Pertahankan receiver sebagai pembuat SCLK/WS seperti desain sekarang.
-5. Pertahankan sample rate nominal 48 kHz dan clock audio yang sekarang bekerja. Jumlah kanal bertambah melalui slot L/R yang sudah tersedia, bukan dengan menaikkan sample rate.
-6. Pertahankan dua koneksi SD eksternal. Tidak perlu menambah SD2/SD3.
+5. Pertahankan sample rate nominal48kHz dan clock audio yang sekarang bekerja. Empat SD diterima paralel, sehingga BCLK/WS tidak perlu dipercepat hanya karena menambah SD.
+6. Pertahankan SD0/SD1. Klik kanan port receiver `sdata_2_in` dan `sdata_3_in` -> Make External. Beri nama yang konsisten, misalnya `sdata_2_in_0` dan `sdata_3_in_0`. Update wrapper sesuai alur GUI.
+7. Pilih dua pin PL yang benar-benar tersedia pada konektor, periksa bank/tegangan dan konflik, lalu tambahkan PACKAGE_PIN serta IOSTANDARD pada XDC untuk kedua port baru. Pin SD2/SD3 sengaja belum ditentukan; jangan menyalin V16/W16 atau menebak pin. Tanpa langkah ini jangan generate bitstream.
 
 ### 5.2 Broadcaster dan dua cabang
 
@@ -149,7 +150,7 @@ Masukan receiver berformat audio AES3; proyek sekarang mengambil PCM signed24 da
 {{8{s_axis_tdata[27]}}, s_axis_tdata[27:4]}
 ```
 
-Gunakan TID untuk memilih kanal. Verifikasi urutan TID aktual lewat simulasi/ILA; jangan mengandalkan urutan numerik tanpa pemeriksaan. Kumpulkan satu frame mengikuti urutan frame receiver yang terverifikasi. Tangani kanal ganda/hilang dengan membuang frame tidak lengkap dan menyinkronkan ulang pada batas frame; jangan menggabungkan sampel periode berbeda hanya karena empat bit `seen` akhirnya terisi.
+Gunakan pemetaan TID0→Mic1, TID2→Mic2, TID4→Mic3, TID6→Mic4. Abaikan TID1/3/5/7. Gunakan TID untuk memilih kanal. Verifikasi urutan TID aktual lewat simulasi/ILA; jangan mengandalkan urutan numerik tanpa pemeriksaan. Kumpulkan satu frame mengikuti urutan frame receiver yang terverifikasi. Tangani kanal ganda/hilang dengan membuang frame tidak lengkap dan menyinkronkan ulang pada batas frame; jangan menggabungkan sampel periode berbeda hanya karena empat bit `seen` akhirnya terisi.
 
 ### 6.2 Ukuran blok yang disarankan
 
@@ -211,7 +212,14 @@ Contoh konstanta yang perlu diterapkan, **belum merupakan kode aktif**:
 #define MIC_BYTES    (MIC_FRAMES * MIC_CHANNELS * sizeof(s32))
 ```
 
-Gunakan buffer DMA beralignment cache yang sesuai seperti sekarang. Flush/invalidate sepanjang MIC_BYTES, arm DMA sebelum receiver mulai, dan tetap layani jaringan saat menunggu DMA. Dua pemanggilan mux RX saat ini sudah memetakan slot01 dan23; jangan menambah pemanggilan untuk SD yang tidak ada.
+Gunakan buffer DMA beralignment cache yang sesuai seperti sekarang. Flush/invalidate sepanjang MIC_BYTES, arm DMA sebelum receiver mulai, dan tetap layani jaringan saat menunggu DMA. Setelah BSP diperbarui untuk receiver8slot, perluas mux menjadi empat pemetaan berikut. CHID di API ini memilih jalur/pasangan stereo; buffer aplikasi tetap hanya empat mic Left.
+
+```c
+XI2s_Rx_SetChMux(&rx, XI2S_RX_CHID0, XI2S_RX_CHMUX_XI2S_01);
+XI2s_Rx_SetChMux(&rx, XI2S_RX_CHID1, XI2S_RX_CHMUX_XI2S_23);
+XI2s_Rx_SetChMux(&rx, XI2S_RX_CHID2, XI2S_RX_CHMUX_XI2S_45);
+XI2s_Rx_SetChMux(&rx, XI2S_RX_CHID3, XI2S_RX_CHMUX_XI2S_67);
+```
 
 ### 7.2 Kontrak paket baru yang disarankan
 
@@ -307,7 +315,7 @@ Sumber dekat dibanding panjang array dapat menyimpang dari model sudut ini. Untu
 
 ### 9.3 Datapath Verilog yang perlu dibuat
 
-- Pengumpul satu frame lengkap empat kanal, sinkron sesuai receiver.
+- Pengumpul satu frame lengkap empat mic dari TID0/2/4/6, sinkron sesuai receiver; abaikan slot Right1/3/5/7.
 - Empat buffer riwayat; maju sekali per frame audio lengkap, bukan per word AXI.
 - Empat delay pecahan memakai interpolasi linear atau filter fractional-delay yang dipilih.
 - Gain kalibrasi tetap per mic dengan lebar hasil perkalian yang cukup.
@@ -353,7 +361,7 @@ Untuk monitoring awal matikan speaker keluaran. Saat mendengarkan beamforming, g
 
 | Tahap | Yang diuji | Syarat lanjut |
 |---|---|---|
-| Receiver | Aktivitas TID0/1/2/3 dan level tiap mic | Empat kanal benar, tidak duplikat/tertukar |
+| Receiver | Slot0–7, level mic pada TID0/2/4/6 | Empat mic benar, slot Right diabaikan |
 | Capture simulasi | Urutan, TLAST, stall, dropblok, reset | Tiap blok64frame utuh dan speaker tidak tertahan |
 | LAN | Magic/versi/panjang/jumlah kanal | Datagram1056byte lolos decode, malformed tidak terus naik |
 | Grafik | Bunyi dekat tiap mic bergantian | Kanal berlabel benar merespons; bunyi akan tetap terdengar kanal lain |
@@ -368,8 +376,9 @@ Kondisi selesai bukan sekadar berhasil build: empat kanal harus terbukti sinkron
 
 ## 12. Daftar perubahan singkat untuk pelaksanaan
 
-- [ ] Wiring dua pasangan L/R pada SD0 danSD1; posisi fisik dicatat.
-- [ ] Receiver4kanal dan seluruh TID diverifikasi.
+- [ ] Wiring empat SD terpisah, semua mic Left/GND; posisi fisik dicatat.
+- [ ] Receiver8slot, SD0–SD3 dan pemetaan mic TID0/2/4/6 diverifikasi.
+- [ ] Pin SD2/SD3 dipilih sesuai skematik/konektor dan ditambahkan ke XDC.
 - [ ] Modul capture4mic dibuat di `srcs/sources_1/new/`, diuji, lalu dirouting lewat GUI.
 - [ ] SDK capture dan UDP diubah menjadi64frame×4kanal.
 - [ ] Python decodeMIC4/version2, empat garis, zoom bersama, demo baru.
